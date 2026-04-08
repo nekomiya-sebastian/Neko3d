@@ -1,0 +1,67 @@
+<!doctype html>
+
+<html>
+	<head>
+		<title>3d test</title>
+		
+		<style>
+		body
+		{
+			padding: 0px;
+			margin: 0px;
+			
+			/* prevent scrolling */
+			/*
+			height: 100%;
+			overflow: hidden;
+			*/
+		}
+		canvas
+		{
+			display: block;
+			margin: auto;
+			
+			/* prevent highlighting (like by double tapping on phone) */
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		</style>
+		
+		<!-- framework scripts -->
+		<script src="Framework/Graphics.js"></script>
+		<script src="Framework/Mouse.js"></script>
+		<script src="Framework/Keyboard.js"></script>
+		<script src="Framework/NekoHitbox.js"></script>
+		<script src="Framework/Button.js"></script>
+		<script src="Framework/Vec2.js"></script>
+		<script src="Framework/Timer.js"></script>
+		<script src="Framework/NekoUtils.js"></script>
+		<script src="Framework/Sprite.js"></script>
+		<script src="Framework/Rect.js"></script>
+		<script src="Framework/Circle.js"></script>
+		<script src="Framework/Range.js"></script>
+		<script src="Framework/Counter.js"></script>
+		<script src="Framework/Anim.js"></script>
+		<script src="Framework/SFX.js"></script>
+		<script src="Framework/NekoCam.js"></script>
+		
+		<!-- 3d stuff -->
+		<script src="Framework/Mat2.js"></script>
+		<script src="Framework/Neko3d/Vec3.js"></script>
+		<script src="Framework/Neko3d/Mat3.js"></script>
+		<script src="Framework/Neko3d/NekoModel.js"></script>
+		<script src="Framework/Neko3d/Neko3dDrawer.js"></script>
+	</head>
+	
+	<body>
+		<!-- <canvas id="nekocanv" width="960" height="540"></canvas> -->
+		<!-- <canvas id="nekocanv" width="840" height="600"></canvas> -->
+		
+		<!-- <canvas id="nekocanv" width="864" height="576"></canvas> -->
+		<canvas id="nekocanv" width="864" height="864"></canvas>
+		
+		<!-- main scr -->
+		<script src="Framework/Main.js"></script>
+	</body>
+</html>

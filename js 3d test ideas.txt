@@ -1,0 +1,9 @@
+test 3d editor thing idea
+	can create points
+	connect points to create a face
+	select a point by clicking (or worst case scenario cycling through with scroll wheel or smth)
+		use wasdRF to move point in space
+		click and drag to select many points and transform all at once?
+	can rotate scene and maybe fly around
+	can save and export model
+	maybe check to make sure we don't create multiple identical faces
