@@ -7,3 +7,9 @@ test 3d editor thing idea
 	can rotate scene and maybe fly around
 	can save and export model
 	maybe check to make sure we don't create multiple identical faces
+	
+	we can maybe even extend this into an animation system at some point with frames and all that
+
+maybe chiptune style music editor? like with a few preset sfx of drums and instruments and such
+	saves in custom format that can be run by the game
+	this is an enormous ask lol

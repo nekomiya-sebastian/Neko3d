@@ -22,4 +22,13 @@ class Keyboard
 	{
 		return( this.keys[key.charCodeAt( 0 )] === true )
 	}
+	IsKeycodeDown( keyCode )
+	{
+		return( this.keys[keyCode] === true )
+	}
 }
+
+class Key {}
+Key.Backspace = 8
+Key.Left = 37
+Key.Right = 39
