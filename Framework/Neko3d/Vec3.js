@@ -86,3 +86,29 @@ Vec3.Zero = function()
 {
 	return( new Vec3( 0,0,0 ) )
 }
+
+
+Vec3.Up = function()
+{
+	return( new Vec3( 0,1,0 ) )
+}
+Vec3.Down = function()
+{
+	return( new Vec3( 0,-1,0 ) )
+}
+Vec3.Left = function()
+{
+	return( new Vec3( -1,0,0 ) )
+}
+Vec3.Right = function()
+{
+	return( new Vec3( 1,0,0 ) )
+}
+Vec3.Forward = function()
+{
+	return( new Vec3( 0,0,1 ) )
+}
+Vec3.Back = function()
+{
+	return( new Vec3( 0,0,-1 ) )
+}

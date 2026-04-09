@@ -13,3 +13,10 @@ test 3d editor thing idea
 maybe chiptune style music editor? like with a few preset sfx of drums and instruments and such
 	saves in custom format that can be run by the game
 	this is an enormous ask lol
+
+
+main menu with list of all the demo scenes you can click to load
+colors string -> index into colors list
+forward direction - can just use init forward direction ( 0,0,1 ) and apply the camera's rotation mat to it
+raycasting idea - make a super long rectangle emanating from the camera, check what it overlaps with,
+	return either all of them or the closest one

@@ -10,6 +10,7 @@ class NekoModel
 			"Mismatching face count and colors list length!" )
 		
 		this.trans = new Transneko( pos,rot,scale )
+		this.transPoints = []
 	}
 	
 	GetPos()
@@ -43,7 +44,6 @@ class NekoModel
 		
 		return( this.transPoints )
 	}
-	
 	GetTransPoint( ind )
 	{
 		NekoUtils.Assert( ind > -1 && ind < this.shape.length )
@@ -53,7 +53,7 @@ class NekoModel
 	GetFaces()
 	{
 		const faces = []
-		for( const i in this.faces )
+		for( let i = 0; i < this.faces.length; ++i )
 		{
 			faces.push( new NekoModelFace( this.faces[i],this,i ) )
 		}
@@ -73,6 +73,36 @@ class NekoModelFace
 		this.ind = ind
 	}
 	
+	// 2d transformed hitbox rect for ui interaction
+	GetRect()
+	{
+		const points = this.GetPoints()
+		
+		// rect is smallest possible rect containing all points
+		const startPoint = this.modelRef.GetTransPoint( this.faceData[0] ).Copy().Project()
+		const rect = new Rect( startPoint.y,startPoint.y,startPoint.x,startPoint.x )
+		for( let i = 1; i < points.length; ++i )
+		{
+			const curPoint = this.modelRef.GetTransPoint( this.faceData[i] ).Copy().Project()
+			if( curPoint.x < rect.left ) rect.left = curPoint.x
+			if( curPoint.x > rect.right ) rect.right = curPoint.x
+			if( curPoint.y > rect.top ) rect.top = curPoint.y
+			if( curPoint.y < rect.bot ) rect.bot = curPoint.y
+		}
+		
+		return( rect )
+	}
+	
+	GetPoints()
+	{
+		const shape = []
+		for( const i in this.faceData )
+		{
+			shape.push( this.modelRef.shape[i] )
+		}
+		return( shape )
+	}
+	
 	GetColor()
 	{
 		let ind = this.ind
@@ -80,28 +110,67 @@ class NekoModelFace
 		while( ind >= nColors ) ind -= nColors
 		return( this.modelRef.colors[this.ind] )
 	}
+	
+	CalcMaxDistToPoint( point )
+	{
+		let maxDist = -Infinity
+		for( const ind of this.faceData )
+		{
+			const curDistCalc = this.modelRef.GetTransPoint( ind )
+				.Copy().Subtract( point ).GetDistSq()
+			if( curDistCalc > maxDist ) maxDist = curDistCalc
+		}
+		return( maxDist )
+	}
+	GetCenter()
+	{
+		const center = Vec3.Zero()
+		for( const ind of this.faceData )
+		{
+			const transPoint = this.modelRef.GetTransPoint( ind )
+			center.Add( transPoint )
+		}
+		center.Divide( this.faceData.length )
+		return( center )
+	}
 }
 
 NekoModel.GenCube = function( w = 0.5,h = 0.5,d = 0.5,colors = [] )
 {
 	const shape = [
-		new Vec3( w,-h,-d ), // bot back right
-		new Vec3( -w,-h,-d ), // bot back left
+		new Vec3( -w,h,d ), // top front left
+		new Vec3( w,h,d ), // top front right
 		new Vec3( w,h,-d ), // top back right
 		new Vec3( -w,h,-d ), // top back left
 		
-		new Vec3( w,-h,d ), // bot front right
 		new Vec3( -w,-h,d ), // bot front left
-		new Vec3( w,h,d ), // top front right
-		new Vec3( -w,h,d ) // top front left
+		new Vec3( w,-h,d ), // bot front right
+		new Vec3( w,-h,-d ), // bot back right
+		new Vec3( -w,-h,-d ) // bot back left
+		
+		// new Vec3( w,-h,-d ), // bot back right
+		// new Vec3( -w,-h,-d ), // bot back left
+		// new Vec3( w,h,-d ), // top back right
+		// new Vec3( -w,h,-d ), // top back left
+		// 
+		// new Vec3( w,-h,d ), // bot front right
+		// new Vec3( -w,-h,d ), // bot front left
+		// new Vec3( w,h,d ), // top front right
+		// new Vec3( -w,h,d ) // top front left
 	]
 	const faces = [
-		[ 0,1,3,2 ], // top
-		[ 0,4,6,2 ], // right
-		[ 2,3,7,6 ], // back
-		[ 4,5,7,6 ], // bot
-		[ 1,0,4,5 ], // front
-		[ 1,5,7,3 ] // left
+		[ 0,1,2,3 ], // top
+		[ 4,5,6,7 ], // bot
+		[ 0,3,7,4 ], // left
+		[ 1,5,6,2 ], // right
+		[ 0,4,5,1 ], // front
+		[ 3,2,6,7 ] // back
+		// [ 0,1,3,2 ], // top
+		// [ 4,5,7,6 ], // bot
+		// [ 1,5,7,3 ], // left
+		// [ 0,4,6,2 ], // right
+		// [ 1,0,4,5 ], // front
+		// [ 2,3,7,6 ] // back
 	]
 	
 	// fill color array if empty, or fill it the rest of the way if necessary

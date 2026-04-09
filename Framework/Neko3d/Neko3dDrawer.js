@@ -7,15 +7,7 @@ class Neko3dDrawer
 	
 	Draw( nekoCam,neko3dCam )
 	{
-		const faces = []
-		
-		// transform faces by their own transform
-		for( const model of this.queuedModels )
-		{
-			model.GenTransPoints( neko3dCam )
-			const gennedFaces = model.GetFaces()
-			for( const face of gennedFaces ) faces.push( face )
-		}
+		const faces = this.GenTransFaceList( neko3dCam )
 		
 		// use highest to lowest dist from camera
 		// 	so greater dist from camera goes first in the array, to be drawn over
@@ -25,13 +17,14 @@ class Neko3dDrawer
 		for( let i = 0; i < faces.length; ++i )
 		{
 			const curFace = faces[i]
-			let maxDist = -Infinity
-			for( const ind of curFace.faceData )
-			{
-				const curDistCalc = curFace.modelRef.GetTransPoint( ind )
-					.Copy().Subtract( camPos ).GetDistSq()
-				if( curDistCalc > maxDist ) maxDist = curDistCalc
-			}
+			// let maxDist = -Infinity
+			// for( const ind of curFace.faceData )
+			// {
+			// 	const curDistCalc = curFace.modelRef.GetTransPoint( ind )
+			// 		.Copy().Subtract( camPos ).GetDistSq()
+			// 	if( curDistCalc > maxDist ) maxDist = curDistCalc
+			// }
+			const maxDist = curFace.CalcMaxDistToPoint( camPos )
 			
 			let insertInd = 0
 			for( insertInd; insertInd < drawFaceInds.length; ++insertInd )
@@ -55,12 +48,26 @@ class Neko3dDrawer
 			}
 			nekoCam.DrawPolygon( polygon,curFace.GetColor(),false )
 		}
-		
-		this.queuedModels.length = 0
+	}
+	
+	GenTransFaceList( neko3dCam )
+	{
+		const faces = []
+		for( const model of this.queuedModels )
+		{
+			model.GenTransPoints( neko3dCam )
+			const gennedFaces = model.GetFaces()
+			for( const face of gennedFaces ) faces.push( face )
+		}
+		return( faces )
 	}
 	
 	QueueModel( nekoModel )
 	{
 		this.queuedModels.push( nekoModel )
+	}
+	ClearQueue()
+	{
+		this.queuedModels.length = 0
 	}
 }

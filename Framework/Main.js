@@ -23,12 +23,22 @@ class Main
 	
 	Update( dt )
 	{
-		this.scenes[this.curScene].Update( this.mouse,this.kbd,dt )
+		const sceneData = {
+			mouse: this.mouse,
+			kbd: this.kbd,
+			dt: dt,
+			neko3dDrawer: this.neko3dDrawer,
+			nekoCam: this.nekoCam
+		}
+		
+		this.scenes[this.curScene].Update( sceneData )
 	}
 	
 	Draw()
 	{
 		this.nekoCam.DrawCamArea()
+		
+		this.neko3dDrawer.ClearQueue()
 		
 		this.scenes[this.curScene].Draw3d( this.neko3dDrawer )
 		

@@ -5,7 +5,7 @@ class Scene
 		this.neko3dCam = neko3dCam
 	}
 	
-	Update( mouse,kbd,dt ) {}
+	Update( sceneData ) {}
 	
 	Draw3d( neko3dDrawer ) {}
 	DrawUI( nekoCam,textDrawer ) {}

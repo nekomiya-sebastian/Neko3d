@@ -74,7 +74,7 @@ class Rect
 	Contains( x,y )
 	{
 		return( x >= this.left && x < this.right &&
-			y >= this.top && y < this.bot )
+			y < this.top && y >= this.bot )
 	}
 	
 	Overlaps( rect )

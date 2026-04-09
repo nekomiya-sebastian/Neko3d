@@ -162,6 +162,13 @@ class NekoCam
 			// .Add( this.camPos )
 			)
 	}
+	Scr2WorldPos3d( screenPos )
+	{
+		return( screenPos.Copy().Subtract( this.screenHSize )
+			.Divide( this.scale3d != 0 ? this.scale3d : 1 )
+			// .Add( this.camPos )
+			)
+	}
 	World2ScrPos( worldPos )
 	{
 		return( worldPos.Copy()

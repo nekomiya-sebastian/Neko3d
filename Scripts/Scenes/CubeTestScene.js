@@ -14,8 +14,12 @@ class CubeTestScene extends Scene
 		this.GenRandCube()
 	}
 	
-	Update( mouse,kbd,dt )
+	Update( sceneData )
 	{
+		const kbd = sceneData.kbd
+		const mouse = sceneData.mouse
+		const dt = sceneData.dt
+		
 		// add new model
 		if( this.addNewCube.Update( kbd ) ) this.GenRandCube()
 		

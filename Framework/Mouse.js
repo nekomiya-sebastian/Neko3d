@@ -67,4 +67,9 @@ class Mouse
 		self.x = inputX// - boundingRect.left - docElement.scrollLeft
 		self.y = inputY// - boundingRect.top - docElement.scrollTop
 	}
+	
+	GetPos()
+	{
+		return( new Vec2( this.x,this.y ) )
+	}
 }

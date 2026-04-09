@@ -7,7 +7,7 @@ class Transneko
 		this.rotMat = Mat3.Identity()
 		this.scale = scale
 		
-		this.transPoints = []
+		// these 2 used not by self, but by NekoModel
 		this.invalidatePoints = true
 		this.invalidateRot = true
 	}
