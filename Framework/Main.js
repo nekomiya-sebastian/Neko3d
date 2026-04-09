@@ -11,10 +11,14 @@ class Main
 		this.neko3dDrawer = new Neko3dDrawer()
 		this.textDrawer = new TextDrawer()
 		
+		this.version = "0.1.0"
+		this.disableUI = false
+		
 		this.scenes = [
-			new CubeTestScene()
+			new CubeTestScene(),
+			new MikesRaftScene()
 		]
-		this.curScene = 0
+		this.curScene = 1
 	}
 	
 	Update( dt )
@@ -28,9 +32,16 @@ class Main
 		
 		this.scenes[this.curScene].Draw3d( this.neko3dDrawer )
 		
-		this.neko3dDrawer.Draw( this.nekoCam )
+		this.neko3dDrawer.Draw( this.nekoCam,this.scenes[this.curScene].Get3dCam() )
 		
-		this.scenes[this.curScene].DrawUI( this.nekoCam,this.textDrawer )
+		if( !this.disableUI )
+		{
+			this.scenes[this.curScene].DrawUI( this.nekoCam,this.textDrawer )
+		}
+		
+		this.textDrawer.DrawText( "Snekos3d v" + this.version,
+			this.nekoCam.GetCamArea().GetTopLeft().Copy().Add( new Vec2( 2,2 ) ),
+			this.nekoCam,false,false )
 	}
 }
 

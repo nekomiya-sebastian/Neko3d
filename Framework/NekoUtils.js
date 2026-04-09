@@ -85,3 +85,9 @@ NekoUtils.OverflowClamp = function( val,clampMin,clampMax )
 	while( val > clampMax ) val -= clampRange
 	return( val )
 }
+NekoUtils.Clamp = function( val,minVal,maxVal )
+{
+	if( val < minVal ) val = minVal
+	if( val > maxVal ) val = maxVal
+	return( val )
+}

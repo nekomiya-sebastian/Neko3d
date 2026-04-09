@@ -42,34 +42,67 @@ class CubeTestScene extends Scene
 		// transform selected model
 		if( this.selectedCube > -1 )
 		{
-			const curCube = this.cubes[this.selectedCube]
-			const boxMoveSpd = 0.3
-			const cubePos = curCube.GetPos()
-			if( kbd.IsKeyDown( "W" ) ) cubePos.z += boxMoveSpd * dt
-			if( kbd.IsKeyDown( "S" ) ) cubePos.z -= boxMoveSpd * dt
-			if( kbd.IsKeyDown( "A" ) ) cubePos.x -= boxMoveSpd * dt
-			if( kbd.IsKeyDown( "D" ) ) cubePos.x += boxMoveSpd * dt
-			if( kbd.IsKeyDown( "R" ) ) cubePos.y -= boxMoveSpd * dt
-			if( kbd.IsKeyDown( "F" ) ) cubePos.y += boxMoveSpd * dt
+			const movingCam = kbd.IsKeycodeDown( 16 ) && false
+			const camFlip = ( movingCam ? -1 : 1 )
+			const curTrans = ( movingCam
+				? this.Get3dCam()
+				: this.cubes[this.selectedCube].trans )
 			
-			const cubeRot = curCube.GetRot()
+			const boxMoveSpd = 0.3 * camFlip
+			const posMove = Vec3.Zero()
+			if( kbd.IsKeyDown( "W" ) ) posMove.z += boxMoveSpd * dt
+			if( kbd.IsKeyDown( "S" ) ) posMove.z -= boxMoveSpd * dt
+			if( kbd.IsKeyDown( "A" ) ) posMove.x -= boxMoveSpd * dt
+			if( kbd.IsKeyDown( "D" ) ) posMove.x += boxMoveSpd * dt
+			if( kbd.IsKeyDown( "R" ) ) posMove.y -= boxMoveSpd * dt
+			if( kbd.IsKeyDown( "F" ) ) posMove.y += boxMoveSpd * dt
+			if( !posMove.Equals( Vec3.Zero() ) )
+			{
+				curTrans.GetPos().Add( posMove )
+				if( movingCam )
+				{
+					for( const cube of this.cubes ) cube.trans.InvalidatePoints()
+				}
+			}
+			
 			const boxRotSpd = Math.PI * 0.05
-			if( kbd.IsKeyDown( "I" ) ) cubeRot.x += boxRotSpd * dt
-			if( kbd.IsKeyDown( "K" ) ) cubeRot.x -= boxRotSpd * dt
-			if( kbd.IsKeyDown( "J" ) ) cubeRot.y += boxRotSpd * dt
-			if( kbd.IsKeyDown( "L" ) ) cubeRot.y -= boxRotSpd * dt
-			if( kbd.IsKeyDown( "Z" ) ) cubeRot.z += boxRotSpd * dt
-			if( kbd.IsKeyDown( "C" ) ) cubeRot.z -= boxRotSpd * dt
+			const rotMove = Vec3.Zero()
+			if( kbd.IsKeyDown( "I" ) ) rotMove.x += boxRotSpd * dt
+			if( kbd.IsKeyDown( "K" ) ) rotMove.x -= boxRotSpd * dt
+			if( kbd.IsKeyDown( "J" ) ) rotMove.y += boxRotSpd * dt
+			if( kbd.IsKeyDown( "L" ) ) rotMove.y -= boxRotSpd * dt
+			if( kbd.IsKeyDown( "Z" ) ) rotMove.z += boxRotSpd * dt * camFlip
+			if( kbd.IsKeyDown( "C" ) ) rotMove.z -= boxRotSpd * dt * camFlip
 			
-			cubeRot.x = NekoUtils.OverflowClamp( cubeRot.x,0,Math.PI * 2 )
-			cubeRot.y = NekoUtils.OverflowClamp( cubeRot.y,0,Math.PI * 2 )
-			cubeRot.z = NekoUtils.OverflowClamp( cubeRot.z,0,Math.PI * 2 )
+			rotMove.x = NekoUtils.OverflowClamp( rotMove.x,0,Math.PI * 2 )
+			rotMove.y = NekoUtils.OverflowClamp( rotMove.y,0,Math.PI * 2 )
+			rotMove.z = NekoUtils.OverflowClamp( rotMove.z,0,Math.PI * 2 )
+			
+			if( !rotMove.Equals( Vec3.Zero() ) )
+			{
+				curTrans.GetRot().Add( rotMove )
+				if( movingCam )
+				{
+					for( const cube of this.cubes )
+					{
+						cube.trans.InvalidateRot()
+						cube.trans.InvalidatePoints()
+					}
+				}
+			}
 			
 			const boxScaleSpd = 0.05
-			let cubeScale = curCube.GetScale()
-			if( kbd.IsKeyDown( "Q" ) ) cubeScale -= boxScaleSpd * dt
-			if( kbd.IsKeyDown( "E" ) ) cubeScale += boxScaleSpd * dt
-			curCube.SetScale( cubeScale )
+			let scaleMove = curTrans.GetScale()
+			if( kbd.IsKeyDown( "Q" ) ) scaleMove -= boxScaleSpd * dt
+			if( kbd.IsKeyDown( "E" ) ) scaleMove += boxScaleSpd * dt
+			if( scaleMove != curTrans.GetScale() )
+			{
+				curTrans.SetScale( scaleMove )
+				if( movingCam )
+				{
+					for( const cube of this.cubes ) cube.trans.InvalidatePoints()
+				}
+			}
 		}
 	}
 	

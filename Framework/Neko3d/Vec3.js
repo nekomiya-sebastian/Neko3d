@@ -28,6 +28,13 @@ class Vec3
 		this.z *= amount
 		return( this )
 	}
+	Divide( amount )
+	{
+		this.x /= amount
+		this.y /= amount
+		this.z /= amount
+		return( this )
+	}
 	
 	GetDistSq()
 	{
@@ -38,6 +45,14 @@ class Vec3
 	GetDist()
 	{
 		return( Math.sqrt( this.GetDistSq() ) )
+	}
+	
+	Normalize()
+	{
+		const len = this.GetDist()
+		if( len != 0.0 ) this.Divide( len )
+		
+		return( this )
 	}
 	
 	Project()

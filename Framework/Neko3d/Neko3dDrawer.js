@@ -5,12 +5,14 @@ class Neko3dDrawer
 		this.queuedModels = []
 	}
 	
-	Draw( nekoCam )
+	Draw( nekoCam,neko3dCam )
 	{
 		const faces = []
+		
+		// transform faces by their own transform
 		for( const model of this.queuedModels )
 		{
-			model.GenTransPoints()
+			model.GenTransPoints( neko3dCam )
 			const gennedFaces = model.GetFaces()
 			for( const face of gennedFaces ) faces.push( face )
 		}

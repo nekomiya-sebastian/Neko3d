@@ -6,67 +6,41 @@ class NekoModel
 		this.shape = shape
 		this.faces = faces
 		this.colors = colors
-		NekoUtils.Assert( this.faces.length == this.colors.length )
+		NekoUtils.Assert( this.faces.length == this.colors.length,
+			"Mismatching face count and colors list length!" )
 		
-		this.pos = pos
-		this.rot = rot
-		this.rotMat = Mat3.Identity()
-		this.scale = scale
-		
-		this.transPoints = []
-		this.invalidatePoints = true
-		this.invalidateRot = true
+		this.trans = new Transneko( pos,rot,scale )
 	}
 	
 	GetPos()
 	{
-		this.invalidatePoints = true
-		return( this.pos )
+		return( this.trans.GetPos() )
 	}
 	GetRot()
 	{
-		this.invalidatePoints = true
-		this.invalidateRot = true
-		return( this.rot )
+		return( this.trans.GetRot() )
 	}
 	GetScale()
 	{
-		return( this.scale )
+		return( this.trans.GetScale() )
 	}
 	SetScale( scale )
 	{
-		this.invalidatePoints = true
-		this.scale = scale
+		this.trans.SetScale( scale )
 	}
 	
-	GenTransPoints()
+	GenTransPoints( neko3dCam )
 	{
-		if( this.invalidatePoints )
+		if( this.trans.invalidatePoints )
 		{
-			if( this.invalidateRot )
-			{
-				this.rotMat = Mat3.GetXRotMat( this.rot.x )
-					.MatMult( Mat3.GetYRotMat( -this.rot.y ) )
-					.MatMult( Mat3.GetZRotMat( this.rot.z ) )
-			}
+			// init trans points based on self
+			this.transPoints = this.trans.GetTransPointsList( this.shape )
+			// then cam transform
+			for( const point of this.transPoints ) neko3dCam.TransPoint( point )
 			
-			this.transPoints.length = 0
-			for( const i in this.shape )
-			{
-				const point = this.shape[i].Copy()
-				this.transPoints.push( point )
-				
-				// scale
-				const boxScale = 1
-				point.Scale( this.scale )
-				
-				// then rotate
-				this.rotMat.Apply( point,true )
-				
-				// finally translate
-				point.Add( this.pos )
-			}
+			this.trans.invalidatePoints = false
 		}
+		
 		return( this.transPoints )
 	}
 	
@@ -101,6 +75,9 @@ class NekoModelFace
 	
 	GetColor()
 	{
+		let ind = this.ind
+		const nColors = this.modelRef.colors.length
+		while( ind >= nColors ) ind -= nColors
 		return( this.modelRef.colors[this.ind] )
 	}
 }
@@ -130,7 +107,5 @@ NekoModel.GenCube = function( w = 0.5,h = 0.5,d = 0.5,colors = [] )
 	// fill color array if empty, or fill it the rest of the way if necessary
 	for( let i = colors.length; i < faces.length; ++i ) colors.push( NekoUtils.RandColor() )
 	
-	return( new NekoModel(
-		shape,faces,colors
-	) )
+	return( new NekoModel( shape,faces,colors ) )
 }
