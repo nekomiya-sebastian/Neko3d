@@ -15,7 +15,7 @@ maybe chiptune style music editor? like with a few preset sfx of drums and instr
 	this is an enormous ask lol
 
 
-main menu with list of all the demo scenes you can click to load
+--main menu with list of all the demo scenes you can click to load
 colors string -> index into colors list
 forward direction - can just use init forward direction ( 0,0,1 ) and apply the camera's rotation mat to it
 raycasting idea - make a super long rectangle emanating from the camera, check what it overlaps with,

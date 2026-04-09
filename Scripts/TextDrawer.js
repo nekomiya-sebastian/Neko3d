@@ -12,18 +12,31 @@ class TextDrawer
 	
 	DrawText( text,pos,nekoCam,centerX = false,centerY = false )
 	{
+		this.DrawAlignedText( text,pos,nekoCam,
+			centerX ? TextDrawer.Alignment.Center : TextDrawer.Alignment.Min,
+			centerY ? TextDrawer.Alignment.Center : TextDrawer.Alignment.Min )
+	}
+	
+	DrawAlignedText( text,pos,nekoCam,alignX,alignY )
+	{
 		let drawX = pos.x
 		let drawY = pos.y
 		
-		if( centerX )
+		const totalWidth = text.length * ( this.letterSize.x + 1 )
+		const totalHeight = this.letterSize.y
+		switch( alignX )
 		{
-			const totalWidth = text.length * ( this.letterSize.x + 1 )
-			drawX -= totalWidth / 2
+			case TextDrawer.Alignment.Center: drawX -= totalWidth / 2
+				break;
+			case TextDrawer.Alignment.Max: drawX -= totalWidth
+				break;
 		}
-		if( centerY )
+		switch( alignY )
 		{
-			const totalHeight = this.letterSize.y
-			drawY -= totalHeight / 2
+			case TextDrawer.Alignment.Center: drawY -= totalHeight / 2
+				break;
+			case TextDrawer.Alignment.Max: drawY -= totalHeight
+				break;
 		}
 		
 		for( let i = 0; i < text.length; ++i )
@@ -53,4 +66,17 @@ class TextDrawer
 			}
 		}
 	}
+	
+	CalcTextHitbox( text )
+	{
+		const totalWidth = text.length * ( this.letterSize.x + 1 )
+		const totalHeight = this.letterSize.y
+		return( new Vec2( totalWidth,totalHeight ) )
+	}
+}
+
+TextDrawer.Alignment = {
+	Min: 0,
+	Center: 1,
+	Max: 2
 }

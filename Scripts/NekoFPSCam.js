@@ -11,13 +11,16 @@ class NekoFPSCam extends Neko3dCam
 		
 		this.lookSens = 0.002
 		this.moveSpd = 0.3
+		
+		this.mouseActive = false
 	}
 	
 	Update( kbd,mouse,dt )
 	{
 		let updatedTrans = false
 		
-		if( mouse.down )
+		if( !mouse.down ) this.mouseActive = true
+		else if( this.mouseActive )
 		{
 			// mouse aim code lifted from Sneko Slayers PlayerCamCtrl
 			const aim = new Vec2(
@@ -68,5 +71,10 @@ class NekoFPSCam extends Neko3dCam
 		}
 		
 		return( updatedTrans )
+	}
+	
+	UnloadCam()
+	{
+		this.mouseActive = false
 	}
 }

@@ -18,40 +18,91 @@ class Main
 			new CubeTestScene(),
 			new MikesRaftScene()
 		]
-		this.curScene = 1
+		this.curScene = -1
+		
+		this.menuButtons = [
+			new TextButton( Vec2.Zero(),"Cube Test",this.textDrawer ),
+			new TextButton( Vec2.Zero(),"My Raft",this.textDrawer )
+		]
+		
+		this.backButton = new TextButton( Vec2.Zero(),"< Main Menu",this.textDrawer )
 	}
 	
 	Update( dt )
 	{
-		const sceneData = {
-			mouse: this.mouse,
-			kbd: this.kbd,
-			dt: dt,
-			neko3dDrawer: this.neko3dDrawer,
-			nekoCam: this.nekoCam
+		if( this.curScene < 0 ) // main menu
+		{
+			for( let i = 0; i < this.menuButtons.length; ++i )
+			{
+				if( this.menuButtons[i].Update( this.mouse,this.nekoCam ) )
+				{
+					this.curScene = i
+				}
+			}
 		}
-		
-		this.scenes[this.curScene].Update( sceneData )
+		else // 3d scenes
+		{
+			const sceneData = {
+				mouse: this.mouse,
+				kbd: this.kbd,
+				dt: dt,
+				neko3dDrawer: this.neko3dDrawer,
+				nekoCam: this.nekoCam
+			}
+			
+			this.scenes[this.curScene].Update( sceneData )
+			
+			if( this.backButton.Update( this.mouse,this.nekoCam ) )
+			{
+				this.scenes[this.curScene].UnloadScene()
+				this.curScene = -1
+			}
+		}
 	}
 	
 	Draw()
 	{
 		this.nekoCam.DrawCamArea()
 		
-		this.neko3dDrawer.ClearQueue()
-		
-		this.scenes[this.curScene].Draw3d( this.neko3dDrawer )
-		
-		this.neko3dDrawer.Draw( this.nekoCam,this.scenes[this.curScene].Get3dCam() )
-		
-		if( !this.disableUI )
+		if( this.curScene < 0 )
 		{
-			this.scenes[this.curScene].DrawUI( this.nekoCam,this.textDrawer )
+			const menuItemPos = this.nekoCam.GetCamArea().GetCenter().Add( Vec2.Up().Scale( 30 ) )
+			const menuItemSize = 12
+			
+			this.textDrawer.DrawText( "Snekos3d Main Menu",
+				menuItemPos,
+				this.nekoCam,true,true )
+			
+			for( const button of this.menuButtons )
+			{
+				menuItemPos.Add( Vec2.Down().Scale( menuItemSize ) )
+				button.MoveTo( menuItemPos.x,menuItemPos.y,true )
+				button.Draw( this.nekoCam,this.textDrawer )
+			}
 		}
-		
-		this.textDrawer.DrawText( "Snekos3d v" + this.version,
-			this.nekoCam.GetCamArea().GetTopLeft().Copy().Add( new Vec2( 2,2 ) ),
-			this.nekoCam,false,false )
+		else
+		{
+			this.neko3dDrawer.ClearQueue()
+			
+			this.scenes[this.curScene].Draw3d( this.neko3dDrawer )
+			
+			this.neko3dDrawer.Draw( this.nekoCam,this.scenes[this.curScene].Get3dCam() )
+			
+			if( !this.disableUI )
+			{
+				this.scenes[this.curScene].DrawUI( this.nekoCam,this.textDrawer )
+				
+				const backButtonPos = this.nekoCam.GetCamArea().GetTopLeft().Copy()
+					.Add( new Vec2( 24,5 ) )
+				this.backButton.MoveTo( backButtonPos.x,backButtonPos.y )
+				this.backButton.Draw( this.nekoCam,this.textDrawer )
+			}
+		}
+			
+		this.textDrawer.DrawAlignedText( "Snekos3d v" + this.version,
+			this.nekoCam.GetCamArea().GetTopRight().Copy().Add( new Vec2( -2,2 ) ),
+			this.nekoCam,
+			TextDrawer.Alignment.Max )
 	}
 }
 

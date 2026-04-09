@@ -10,6 +10,11 @@ class Scene
 	Draw3d( neko3dDrawer ) {}
 	DrawUI( nekoCam,textDrawer ) {}
 	
+	UnloadScene()
+	{
+		this.neko3dCam.UnloadCam()
+	}
+	
 	Get3dCam()
 	{
 		return( this.neko3dCam )

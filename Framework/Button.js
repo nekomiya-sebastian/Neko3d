@@ -9,7 +9,7 @@ class Button extends Hitbox
 		this.pressed = false
 	}
 	
-	Update( mouse )
+	Update( mouse,nekoCam )
 	{
 		this.pressed = false
 		
@@ -22,14 +22,17 @@ class Button extends Hitbox
 		}
 		else
 		{
-			this.hovering = this.Contains( mouse.x,mouse.y )
+			const mouseWorldPos = nekoCam.GetMouseWorldPos( mouse )
+			this.hovering = this.Contains( mouseWorldPos.x,mouseWorldPos.y )
 		}
+		
+		return( this.Pressed() )
 	}
 	
-	Draw( gfx,regularColor = "green",highlightColor = "lime" )
+	Draw( nekoCam,regularColor = "green",highlightColor = "lime" )
 	{
 		const drawCol = this.hovering ? highlightColor : regularColor
-		super.Draw( gfx,drawCol )
+		super.Draw( nekoCam,drawCol )
 	}
 	
 	Pressed()

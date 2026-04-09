@@ -23,4 +23,6 @@ class Neko3dCam extends Transneko
 			.MatMult( Mat3.GetXRotMat( this.rot.x ) )
 			.MatMult( Mat3.GetZRotMat( this.rot.z ) )
 	}
+	
+	UnloadCam() {}
 }

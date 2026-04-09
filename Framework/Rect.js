@@ -119,6 +119,10 @@ class Rect
 	{
 		return( new Vec2( this.left,this.top ) )
 	}
+	GetTopRight()
+	{
+		return( new Vec2( this.right,this.top ) )
+	}
 	
 	GetRandPos()
 	{
