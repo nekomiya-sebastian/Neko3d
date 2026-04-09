@@ -7,7 +7,7 @@ class Neko3dDrawer
 	
 	Draw( nekoCam,neko3dCam )
 	{
-		const faces = this.GenTransFaceList( neko3dCam )
+		const faces = this.GenTransFaceList( this.queuedModels,neko3dCam )
 		
 		// use highest to lowest dist from camera
 		// 	so greater dist from camera goes first in the array, to be drawn over
@@ -50,10 +50,10 @@ class Neko3dDrawer
 		}
 	}
 	
-	GenTransFaceList( neko3dCam )
+	GenTransFaceList( models,neko3dCam )
 	{
 		const faces = []
-		for( const model of this.queuedModels )
+		for( const model of models )
 		{
 			model.GenTransPoints( neko3dCam )
 			const gennedFaces = model.GetFaces()

@@ -6,6 +6,7 @@ class NekoModel
 		this.shape = shape
 		this.faces = faces
 		this.colors = colors
+		// we need this since color indices will be jumbled with multiple models
 		NekoUtils.Assert( this.faces.length == this.colors.length,
 			"Mismatching face count and colors list length!" )
 		
@@ -32,10 +33,12 @@ class NekoModel
 	
 	GenTransPoints( neko3dCam )
 	{
+		this.neko3dCam = neko3dCam
 		if( this.trans.invalidatePoints )
 		{
 			// init trans points based on self
-			this.transPoints = this.trans.GetTransPointsList( this.shape )
+			// this.transPoints = this.trans.GetTransPointsList( this.shape )
+			this.trans.FillTransPointsList( this.shape,this.transPoints )
 			// then cam transform
 			for( const point of this.transPoints ) neko3dCam.TransPoint( point )
 			
@@ -46,8 +49,12 @@ class NekoModel
 	}
 	GetTransPoint( ind )
 	{
-		NekoUtils.Assert( ind > -1 && ind < this.shape.length )
-		return( this.transPoints[ind] )
+		const testPoint = this.trans.TransPoint( this.shape[ind].Copy() )
+		this.neko3dCam.TransPoint( testPoint )
+		return( testPoint )
+		
+		// NekoUtils.Assert( ind > -1 && ind < this.shape.length )
+		// return( this.transPoints[ind] )
 	}
 	
 	GetFaces()
@@ -147,16 +154,6 @@ NekoModel.GenCube = function( w = 0.5,h = 0.5,d = 0.5,colors = [] )
 		new Vec3( w,-h,d ), // bot front right
 		new Vec3( w,-h,-d ), // bot back right
 		new Vec3( -w,-h,-d ) // bot back left
-		
-		// new Vec3( w,-h,-d ), // bot back right
-		// new Vec3( -w,-h,-d ), // bot back left
-		// new Vec3( w,h,-d ), // top back right
-		// new Vec3( -w,h,-d ), // top back left
-		// 
-		// new Vec3( w,-h,d ), // bot front right
-		// new Vec3( -w,-h,d ), // bot front left
-		// new Vec3( w,h,d ), // top front right
-		// new Vec3( -w,h,d ) // top front left
 	]
 	const faces = [
 		[ 0,1,2,3 ], // top
@@ -165,12 +162,6 @@ NekoModel.GenCube = function( w = 0.5,h = 0.5,d = 0.5,colors = [] )
 		[ 1,5,6,2 ], // right
 		[ 0,4,5,1 ], // front
 		[ 3,2,6,7 ] // back
-		// [ 0,1,3,2 ], // top
-		// [ 4,5,7,6 ], // bot
-		// [ 1,5,7,3 ], // left
-		// [ 0,4,6,2 ], // right
-		// [ 1,0,4,5 ], // front
-		// [ 2,3,7,6 ] // back
 	]
 	
 	// fill color array if empty, or fill it the rest of the way if necessary

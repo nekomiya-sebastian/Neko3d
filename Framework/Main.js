@@ -11,7 +11,7 @@ class Main
 		this.neko3dDrawer = new Neko3dDrawer()
 		this.textDrawer = new TextDrawer()
 		
-		this.version = "0.1.0"
+		this.version = "0.2.0"
 		this.disableUI = false
 		
 		this.scenes = [

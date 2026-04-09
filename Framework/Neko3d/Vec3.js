@@ -86,7 +86,10 @@ Vec3.Zero = function()
 {
 	return( new Vec3( 0,0,0 ) )
 }
-
+Vec3.One = function()
+{
+	return( new Vec3( 1,1,1 ) )
+}
 
 Vec3.Up = function()
 {

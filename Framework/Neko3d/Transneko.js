@@ -32,6 +32,26 @@ class Transneko
 		
 		return( transPoints )
 	}
+	// Trying this instead of GetTransPointsList so we can reduce memory footprint maybe
+	FillTransPointsList( shape,list )
+	{
+		// fill initial list if empty
+		if( list.length < shape.length )
+		{
+			const points = this.GetTransPointsList( shape )
+			for( const point of points ) list.push( point )
+			return( list )
+		}
+		
+		// transform list elements without creating new ones
+		for( let i = 0; i < shape.length; ++i )
+		{
+			list[i].Set( shape[i] )
+			this.TransPoint( list[i] )
+		}
+		
+		return( list )
+	}
 	
 	TransPoint( point )
 	{

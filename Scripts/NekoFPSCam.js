@@ -50,7 +50,7 @@ class NekoFPSCam extends Neko3dCam
 		if( kbd.IsKeyDown( "D" ) ) --moveInput.x
 		if( kbd.IsKeyDown( "R" ) ) ++moveInput.y
 		if( kbd.IsKeyDown( "F" ) ) --moveInput.y
-		if( !moveInput.Equals( Vec3.Zero() ) )
+		// if( !moveInput.Equals( Vec3.Zero() ) )
 		{
 			updatedTrans = true
 			
