@@ -6,8 +6,10 @@ class NekoFPSCam extends Neko3dCam
 		
 		this.mousePos = Vec2.Zero()
 		
-		this.maxAimMove = 90.0 - 1.0
-		this.vertCutoff = 10.0
+		// max amount of rotation allowed per frame (holdover from Sneko Slayers code)
+		this.maxAimMove = NekoUtils.Deg2Rad( 90.0 - 1.0 )
+		// max amount up/down you can look
+		this.vertCutoff = Math.PI / 2.0 - NekoUtils.Deg2Rad( 10.0 )
 		
 		this.lookSens = 0.002
 		this.moveSpd = 0.3
@@ -32,14 +34,11 @@ class NekoFPSCam extends Neko3dCam
 			{
 				updatedTrans = true
 				
-				// todo: replace with NekoUtils.Clamp
-				if( aim.y > this.maxAimMove ) aim.y = this.maxAimMove;
-				if( aim.y < -this.maxAimMove ) aim.y = -this.maxAimMove;
+				aim.y = NekoUtils.Clamp( aim.y,-this.maxAimMove,this.maxAimMove )
 				
 				const rot = this.GetRot()
 				rot.x -= aim.y
-				if( rot.x > 90.0 - this.vertCutoff && rot.x < 180.0 ) rot.x = 90.0 - this.vertCutoff;
-				if( rot.x < 270.0 + this.vertCutoff && rot.x > 180.0 ) rot.x = 270.0 + this.vertCutoff;
+				rot.x = NekoUtils.Clamp( rot.x,-this.vertCutoff,this.vertCutoff )
 				rot.y -= aim.x
 			}
 		}
@@ -53,7 +52,7 @@ class NekoFPSCam extends Neko3dCam
 		if( kbd.IsKeyDown( "D" ) ) --moveInput.x
 		if( kbd.IsKeyDown( "R" ) ) ++moveInput.y
 		if( kbd.IsKeyDown( "F" ) ) --moveInput.y
-		// if( !moveInput.Equals( Vec3.Zero() ) )
+		if( !moveInput.Equals( Vec3.Zero() ) )
 		{
 			updatedTrans = true
 			

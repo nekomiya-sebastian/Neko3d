@@ -87,7 +87,22 @@ NekoUtils.OverflowClamp = function( val,clampMin,clampMax )
 }
 NekoUtils.Clamp = function( val,minVal,maxVal )
 {
+	if( minVal > maxVal )
+	{
+		const temp = minVal
+		minVal = maxVal
+		maxVal = temp
+	}
 	if( val < minVal ) val = minVal
 	if( val > maxVal ) val = maxVal
 	return( val )
+}
+
+NekoUtils.Rad2Deg = function( rads )
+{
+	return( rads * ( 180.0 / Math.PI ) )
+}
+NekoUtils.Deg2Rad = function( deg )
+{
+	return( deg * ( Math.PI / 180.0 ) )
 }

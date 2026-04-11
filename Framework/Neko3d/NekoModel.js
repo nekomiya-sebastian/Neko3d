@@ -49,12 +49,14 @@ class NekoModel
 	}
 	GetTransPoint( ind )
 	{
-		const testPoint = this.trans.TransPoint( this.shape[ind].Copy() )
-		this.neko3dCam.TransPoint( testPoint )
-		return( testPoint )
+		// generate on the fly
+		// const testPoint = this.trans.TransPoint( this.shape[ind].Copy() )
+		// this.neko3dCam.TransPoint( testPoint )
+		// return( testPoint )
 		
-		// NekoUtils.Assert( ind > -1 && ind < this.shape.length )
-		// return( this.transPoints[ind] )
+		// use cached points
+		NekoUtils.Assert( ind > -1 && ind < this.shape.length )
+		return( this.transPoints[ind] )
 	}
 	
 	GetFaces()
