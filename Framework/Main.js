@@ -74,6 +74,9 @@ class Main
 			this.textDrawer.DrawText( "Snekos3d Main Menu",
 				menuItemPos,
 				this.nekoCam,true,true )
+			this.textDrawer.DrawText( "__________________",
+				menuItemPos.Add( Vec2.Down().Scale( 3 ) ),
+				this.nekoCam,true,true )
 			
 			for( const button of this.menuButtons )
 			{

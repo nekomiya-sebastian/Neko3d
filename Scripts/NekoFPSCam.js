@@ -66,7 +66,7 @@ class NekoFPSCam extends Neko3dCam
 				.Scale( moveInput.z ) )
 			moveVec.Add( new Vec3( 0,moveInput.y,0 ) )
 			
-			this.GetPos().Add( moveVec.Normalize().Scale( this.moveSpd ) )
+			this.GetPos().Add( moveVec.Normalize().Scale( this.moveSpd * dt ) )
 		}
 		
 		return( updatedTrans )
@@ -75,5 +75,21 @@ class NekoFPSCam extends Neko3dCam
 	UnloadCam()
 	{
 		this.mouseActive = false
+	}
+	
+	TransPoint( point )
+	{
+		if( this.invalidateRot )
+		{
+			this.rotMat = this.GetRotMat()
+			this.invalidateRot = false
+		}
+		
+		point.Scale( this.scale )
+		// translate before scale for camera for some reason (but only for fps cam???)
+		point.Add( this.pos )
+		this.rotMat.Apply( point,true )
+		
+		return( point )
 	}
 }

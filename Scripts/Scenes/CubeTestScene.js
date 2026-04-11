@@ -123,13 +123,7 @@ class CubeTestScene extends Scene
 			"[space] to add cube, [backspace] to delete",
 			"left/right arrow keys to cycle cubes"
 		]
-		const tutHeight = 8
-		const tutPos = new Vec2( 0,nekoCam.GetCamArea().bot - tutHeight * ( tuts.length + 1 ) )
-		for( const tutText of tuts )
-		{
-			tutPos.y += tutHeight
-			textDrawer.DrawText( tutText,tutPos,nekoCam,true,false )
-		}
+		this.DrawTutText( tuts,nekoCam,textDrawer )
 	}
 	
 	GenRandCube()

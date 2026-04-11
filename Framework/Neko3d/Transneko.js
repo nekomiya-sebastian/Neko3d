@@ -122,4 +122,9 @@ class Transneko
 			.MatMult( Mat3.GetYRotMat( -this.rot.y ) )
 			.MatMult( Mat3.GetZRotMat( this.rot.z ) )
 	}
+	
+	CalcForward()
+	{
+		return( this.GetRotMat().Apply( Vec3.Forward() ) )
+	}
 }

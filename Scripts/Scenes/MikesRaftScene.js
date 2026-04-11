@@ -60,7 +60,7 @@ class MikesRaftScene extends Scene
 	{
 		// fps cam returns true when trans is updated, so we know to update all the models cached points
 		let camUpdated = false
-		if( this.Get3dCam().Update( sceneData.kbd,sceneData.mouse ) )
+		if( this.Get3dCam().Update( sceneData.kbd,sceneData.mouse,sceneData.dt ) )
 		{
 			camUpdated = true
 			
@@ -171,13 +171,7 @@ class MikesRaftScene extends Scene
 			"Build your raft :D"
 			// "Build a raft for Mike the Sneko!"
 		]
-		const tutHeight = 8
-		const tutPos = new Vec2( 0,nekoCam.GetCamArea().bot - tutHeight * ( tuts.length + 1 ) )
-		for( const tutText of tuts )
-		{
-			tutPos.y += tutHeight
-			textDrawer.DrawText( tutText,tutPos,nekoCam,true,false )
-		}
+		this.DrawTutText( tuts,nekoCam,textDrawer )
 	}
 	
 	GetTargetCubeData( sceneData )

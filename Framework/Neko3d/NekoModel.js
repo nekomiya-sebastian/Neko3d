@@ -33,11 +33,9 @@ class NekoModel
 	
 	GenTransPoints( neko3dCam )
 	{
-		this.neko3dCam = neko3dCam
 		if( this.trans.invalidatePoints )
 		{
-			// init trans points based on self
-			// this.transPoints = this.trans.GetTransPointsList( this.shape )
+			// set trans points based on self
 			this.trans.FillTransPointsList( this.shape,this.transPoints )
 			// then cam transform
 			for( const point of this.transPoints ) neko3dCam.TransPoint( point )
@@ -49,11 +47,6 @@ class NekoModel
 	}
 	GetTransPoint( ind )
 	{
-		// generate on the fly
-		// const testPoint = this.trans.TransPoint( this.shape[ind].Copy() )
-		// this.neko3dCam.TransPoint( testPoint )
-		// return( testPoint )
-		
 		// use cached points
 		NekoUtils.Assert( ind > -1 && ind < this.shape.length )
 		return( this.transPoints[ind] )
@@ -185,33 +178,27 @@ NekoModel.GenerateGlobe = function( radius,nLat,nLong )
 	shape.push( Vec3.Up().Scale( radius ) )
 	shape.push( Vec3.Down().Scale( radius ) )
 	
-	// const longDist = ( radius * 2 ) / ( nLong + 1 )
-	// const longAng = ( Math.PI * 2.0 ) / ( nLong + ( nLong % 2 == 0 ? 1 : 0 ) )
 	const longAng = Math.PI / ( nLong + 1 )
 	const latAng = ( Math.PI * 2.0 ) / nLat
 	const minLon = -Math.floor( nLong / 2 )
 	const maxLon = Math.ceil( nLong / 2 )
 	const lonOffset = ( nLong % 2 == 0 ? 0.5 : 0 )
+	
+	// precache lat mats so we can avoid recalcing unnecessarily
+	const latMats = []
+	for( let i = 0; i < nLat; ++i ) latMats.push( Mat3.GetYRotMat( latAng * i ) )
+	
 	for( let lon = minLon; lon < maxLon; ++lon )
 	{
 		const lonMat = Mat3.GetZRotMat( longAng * ( lon + lonOffset ) )
 		for( let lat = 0; lat < nLat; ++lat )
 		{
-			// const downDist = longDist * ( lon + 1 )
-			// const outDist = radius
 			const point = Vec3.Right().Scale( radius )
 			
-			const rotMat = lonMat.Copy().MatMult( Mat3.GetYRotMat( latAng * lat ) )
+			const rotMat = lonMat.Copy().MatMult( latMats[lat] )
 			
 			rotMat.Apply( point,true )
 			
-			// const point = new Vec3(
-			// 	Math.cos( latAng * lat ) * radius,
-			// 	0.0,
-			// 	Math.sin( latAng * lat ) * radius
-			// )
-			// // add ang out somehow
-			// // point.Add( 
 			shape.push( point )
 		}
 	}
