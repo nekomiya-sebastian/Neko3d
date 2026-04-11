@@ -171,3 +171,93 @@ NekoModel.GenCube = function( w = 0.5,h = 0.5,d = 0.5,colors = [] )
 	
 	return( new NekoModel( shape,faces,colors ) )
 }
+
+// lat is how many points around
+// long is how many points tall
+NekoModel.GenerateGlobe = function( radius,nLat,nLong )
+{
+	NekoUtils.Assert( nLat > 2,"Invalid globe nLat, can't generate 3d shape this way!" )
+	NekoUtils.Assert( nLong > 0,"Invalid globe nLong, can't generate 3d shape this way!" )
+	
+	const shape = []
+	
+	// generate poles
+	shape.push( Vec3.Up().Scale( radius ) )
+	shape.push( Vec3.Down().Scale( radius ) )
+	
+	// const longDist = ( radius * 2 ) / ( nLong + 1 )
+	// const longAng = ( Math.PI * 2.0 ) / ( nLong + ( nLong % 2 == 0 ? 1 : 0 ) )
+	const longAng = Math.PI / ( nLong + 1 )
+	const latAng = ( Math.PI * 2.0 ) / nLat
+	const minLon = -Math.floor( nLong / 2 )
+	const maxLon = Math.ceil( nLong / 2 )
+	const lonOffset = ( nLong % 2 == 0 ? 0.5 : 0 )
+	for( let lon = minLon; lon < maxLon; ++lon )
+	{
+		const lonMat = Mat3.GetZRotMat( longAng * ( lon + lonOffset ) )
+		for( let lat = 0; lat < nLat; ++lat )
+		{
+			// const downDist = longDist * ( lon + 1 )
+			// const outDist = radius
+			const point = Vec3.Right().Scale( radius )
+			
+			const rotMat = lonMat.Copy().MatMult( Mat3.GetYRotMat( latAng * lat ) )
+			
+			rotMat.Apply( point,true )
+			
+			// const point = new Vec3(
+			// 	Math.cos( latAng * lat ) * radius,
+			// 	0.0,
+			// 	Math.sin( latAng * lat ) * radius
+			// )
+			// // add ang out somehow
+			// // point.Add( 
+			shape.push( point )
+		}
+	}
+	
+	const faces = []
+	// add a temporary face with all points for testing
+	for( let i = 0; i < shape.length; ++i ) faces.push( [ i ] )
+	
+	// these are backwards I know
+	const topPoleInd = 1
+	const botPoleInd = 0
+	const latStart = 2
+	
+	// bot faces
+	for( let i = 0; i < nLat; ++i )
+	{
+		const nextLat = ( i == nLat - 1 ? latStart : i + latStart + 1 ) // loop to first on last
+		
+		faces.push( [ botPoleInd,i + latStart,nextLat ] )
+	}
+	
+	// above row is row below offset by +1
+	// middle faces
+	for( let i = 0; i < nLong - 1; ++i )
+	{
+		const curLatStart = latStart + ( ( i + 1 ) * nLat )
+		for( let j = 0; j < nLat; ++j )
+		{
+			const nextLat = ( j == nLat - 1 ? curLatStart : j + curLatStart + 1 )
+			
+			faces.push( [ j + curLatStart,nextLat,
+				nextLat - nLat,j + curLatStart - nLat ] )
+		}
+	}
+	
+	// top faces
+	const topLatStart = latStart + ( nLong - 1 ) * nLat
+	for( let i = 0; i < nLat; ++i )
+	{
+		const nextLat = ( i == nLat - 1 ? topLatStart : i + topLatStart + 1 ) // loop to first on last
+		
+		faces.push( [ topPoleInd,i + topLatStart,nextLat ] )
+	}
+	
+	const colors = []
+	while( colors.length < faces.length ) colors.push( NekoUtils.RandColor() )
+	
+	return( new NekoModel( shape,faces,colors ) )
+}

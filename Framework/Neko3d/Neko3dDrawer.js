@@ -17,13 +17,6 @@ class Neko3dDrawer
 		for( let i = 0; i < faces.length; ++i )
 		{
 			const curFace = faces[i]
-			// let maxDist = -Infinity
-			// for( const ind of curFace.faceData )
-			// {
-			// 	const curDistCalc = curFace.modelRef.GetTransPoint( ind )
-			// 		.Copy().Subtract( camPos ).GetDistSq()
-			// 	if( curDistCalc > maxDist ) maxDist = curDistCalc
-			// }
 			const maxDist = curFace.CalcMaxDistToPoint( camPos )
 			
 			let insertInd = 0
@@ -46,7 +39,11 @@ class Neko3dDrawer
 				const curPoint = curFace.modelRef.GetTransPoint( ind )
 				if( curPoint.z > 0 ) polygon.push( curPoint.Project() )
 			}
+			// draw polygon
 			nekoCam.DrawPolygon( polygon,curFace.GetColor(),false )
+			
+			// draw points
+			// nekoCam.DrawPolyPoints( polygon,curFace.GetColor() )
 		}
 	}
 	

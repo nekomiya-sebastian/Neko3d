@@ -98,7 +98,7 @@ class NekoCam
 		}
 	}
 	
-	DrawRect( worldPos,width,height,color,centered = false )
+	DrawRect( worldPos,width,height,color,centered = false,use3dScale = false )
 	{
 		const rectRect = Rect.FromXYWH( 0,0,width,height )
 		const rectPos = worldPos.Copy()
@@ -106,11 +106,15 @@ class NekoCam
 		rectRect.MoveTo( rectPos )
 		if( this.camRect.Overlaps( rectRect ) )
 		{
-			const drawPos = this.World2ScrPos( worldPos.Copy().Subtract( this.camPos ) )
-			if( centered ) drawPos.Subtract( rectRect.GetHalfSize().Scale( this.scale ) )
+			const curScale = use3dScale ? this.scale3d : this.scale
+			const toTransPos = worldPos.Copy().Subtract( this.camPos )
+			const drawPos = ( use3dScale
+				? this.World2ScrPos3d( toTransPos )
+				: this.World2ScrPos( toTransPos ) )
+			if( centered ) drawPos.Subtract( rectRect.GetHalfSize().Scale( curScale ) )
 			this.gfx.DrawRect( drawPos.x,drawPos.y,
-				rectRect.GetWidth() * this.scale,
-				rectRect.GetHeight() * this.scale,
+				rectRect.GetWidth() * curScale,
+				rectRect.GetHeight() * curScale,
 				color )
 		}
 	}
@@ -153,6 +157,10 @@ class NekoCam
 			ctx.fillStyle = color
 			ctx.fill()
 		}
+	}
+	DrawPolyPoints( polygon,color,size = 0.02 )
+	{
+		for( const point of polygon ) this.DrawRect( point,size,size,color,true,true )
 	}
 	
 	Scr2WorldPos( screenPos )

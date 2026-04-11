@@ -16,13 +16,15 @@ class Main
 		
 		this.scenes = [
 			new CubeTestScene(),
-			new MikesRaftScene()
+			new MikesRaftScene(),
+			new LightingTestScene()
 		]
 		this.curScene = -1
 		
 		this.menuButtons = [
 			new TextButton( Vec2.Zero(),"Cube Test",this.textDrawer ),
-			new TextButton( Vec2.Zero(),"My Raft",this.textDrawer )
+			new TextButton( Vec2.Zero(),"My Raft",this.textDrawer ),
+			new TextButton( Vec2.Zero(),"Lighting Test",this.textDrawer )
 		]
 		
 		this.backButton = new TextButton( Vec2.Zero(),"< Main Menu",this.textDrawer )

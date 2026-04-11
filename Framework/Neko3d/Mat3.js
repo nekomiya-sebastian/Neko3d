@@ -47,6 +47,21 @@ class Mat3
 		
 		return( newMat )
 	}
+	
+	Copy()
+	{
+		return( new Mat3(
+			this.a,
+			this.b,
+			this.c,
+			this.d,
+			this.e,
+			this.f,
+			this.g,
+			this.h,
+			this.i,
+		) )
+	}
 }
 
 Mat3.Identity = function()
