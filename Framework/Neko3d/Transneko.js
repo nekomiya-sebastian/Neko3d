@@ -10,6 +10,7 @@ class Transneko
 		// these 2 used not by self, but by NekoModel
 		this.invalidatePoints = true
 		this.invalidateRot = true
+		this.invalidateNorms = true
 	}
 	
 	GetTransPointsList( shape )
@@ -80,6 +81,7 @@ class Transneko
 	InvalidateRot()
 	{
 		this.invalidateRot = true
+		this.invalidateNorms = true
 	}
 	
 	GetPos()
@@ -95,6 +97,7 @@ class Transneko
 	{
 		this.invalidatePoints = true
 		this.invalidateRot = true
+		this.invalidateNorms = true
 		return( this.rot )
 	}
 	GetRotCopy()

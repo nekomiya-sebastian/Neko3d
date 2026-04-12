@@ -180,7 +180,7 @@ class MikesRaftScene extends Scene
 		
 		const mousePos = sceneData.nekoCam.Scr2WorldPos3d( sceneData.mouse.GetPos() )
 		// check cube face hit and add new cube in that direction
-		const allFaces = sceneData.neko3dDrawer.GenTransFaceList( this.cubes,this.Get3dCam() )
+		const allFaces = sceneData.neko3dDrawer.GenTransFaceList( this.cubes,this.Get3dCam(),false )
 		
 		let minDist = Infinity
 		let minInd = -1

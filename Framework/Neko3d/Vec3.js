@@ -36,6 +36,11 @@ class Vec3
 		return( this )
 	}
 	
+	Dot( other )
+	{
+		return( this.x * other.x + this.y * other.y + this.z * other.z )
+	}
+	
 	GetDistSq()
 	{
 		return( this.x * this.x +

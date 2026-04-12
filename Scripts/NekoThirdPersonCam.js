@@ -15,7 +15,7 @@ class NekoThirdPersonCam extends Neko3dCam
 		
 		this.mouseActive = false
 		
-		this.distMoveSpd = 1
+		this.camMoveSpd = 0.4
 		this.camDist = 15
 		this.minCamDist = 0.8
 		this.maxCamDist = 50
@@ -50,8 +50,8 @@ class NekoThirdPersonCam extends Neko3dCam
 		this.mousePos.SetXY( mouse.x,mouse.y )
 		
 		let distMove = 0
-		if( kbd.IsKeyDown( "W" ) ) distMove -= this.distMoveSpd * dt
-		if( kbd.IsKeyDown( "S" ) ) distMove += this.distMoveSpd * dt
+		if( kbd.IsKeyDown( "W" ) ) distMove -= this.camMoveSpd * dt
+		if( kbd.IsKeyDown( "S" ) ) distMove += this.camMoveSpd * dt
 		if( distMove != 0 )
 		{
 			this.camDist += distMove

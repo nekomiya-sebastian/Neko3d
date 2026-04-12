@@ -47,15 +47,19 @@ class Neko3dDrawer
 		}
 	}
 	
-	GenTransFaceList( models,neko3dCam )
+	GenTransFaceList( models,neko3dCam,hideFacingAway = true )
 	{
 		const faces = []
 		for( const model of models )
 		{
 			model.GenTransPoints( neko3dCam )
 			const gennedFaces = model.GetFaces()
-			for( const face of gennedFaces ) faces.push( face )
+			for( const face of gennedFaces )
+			{
+				if( !hideFacingAway || face.FacingCam( neko3dCam ) ) faces.push( face )
+			}
 		}
+		// console.log( "face drawn count: " + faces.length )
 		return( faces )
 	}
 	

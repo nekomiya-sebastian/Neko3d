@@ -12,6 +12,9 @@ class NekoModel
 		
 		this.trans = new Transneko( pos,rot,scale )
 		this.transPoints = []
+		
+		this.center = Vec3.Zero()
+		this.norms = []
 	}
 	
 	GetPos()
@@ -37,8 +40,15 @@ class NekoModel
 		{
 			// set trans points based on self
 			this.trans.FillTransPointsList( this.shape,this.transPoints )
+			
 			// then cam transform
-			for( const point of this.transPoints ) neko3dCam.TransPoint( point )
+			this.center.SetXYZ( 0,0,0 )
+			for( const point of this.transPoints )
+			{
+				neko3dCam.TransPoint( point )
+				this.center.Add( point )
+			}
+			this.center.Divide( this.transPoints.length )
 			
 			this.trans.invalidatePoints = false
 		}
@@ -58,6 +68,7 @@ class NekoModel
 		for( let i = 0; i < this.faces.length; ++i )
 		{
 			faces.push( new NekoModelFace( this.faces[i],this,i ) )
+			if( this.trans.invalidateNorms ) this.norms[i] = faces[i].GetCenter().Subtract( this.center )
 		}
 		return( faces )
 	}
@@ -73,6 +84,14 @@ class NekoModelFace
 		this.faceData = faceData
 		this.modelRef = modelRef
 		this.ind = ind
+	}
+	
+	FacingCam( neko3dCam )
+	{
+		// const dotResult = neko3dCam.CalcForward().Dot( this.modelRef.norms[this.ind] )
+		const dotResult = Vec3.Forward().Dot( this.modelRef.norms[this.ind] )
+		return( dotResult < 0 ) // <0 = pointing same dir, >0 = opposite, =0 = perpendicular
+		// (it's backwards from what it should be I know shut up)
 	}
 	
 	// 2d transformed hitbox rect for ui interaction
@@ -167,7 +186,7 @@ NekoModel.GenCube = function( w = 0.5,h = 0.5,d = 0.5,colors = [] )
 
 // lat is how many points around
 // long is how many points tall
-NekoModel.GenerateGlobe = function( radius,nLat,nLong )
+NekoModel.GenerateGlobe = function( radius,nLat,nLong,color = null )
 {
 	NekoUtils.Assert( nLat > 2,"Invalid globe nLat, can't generate 3d shape this way!" )
 	NekoUtils.Assert( nLong > 0,"Invalid globe nLong, can't generate 3d shape this way!" )
@@ -244,7 +263,10 @@ NekoModel.GenerateGlobe = function( radius,nLat,nLong )
 	}
 	
 	const colors = []
-	while( colors.length < faces.length ) colors.push( NekoUtils.RandColor() )
+	for( let i = 0; i < faces.length; ++i )
+	{
+		colors.push( color == null ? NekoUtils.RandColor() : color )
+	}
 	
 	return( new NekoModel( shape,faces,colors ) )
 }
