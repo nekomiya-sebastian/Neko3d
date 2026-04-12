@@ -5,9 +5,9 @@ class Neko3dDrawer
 		this.queuedModels = []
 	}
 	
-	Draw( nekoCam,neko3dCam )
+	Draw( nekoCam,neko3dCam,light )
 	{
-		const faces = this.GenTransFaceList( this.queuedModels,neko3dCam )
+		const faces = this.GenTransFaceList( this.queuedModels,neko3dCam,true,light )
 		
 		// use highest to lowest dist from camera
 		// 	so greater dist from camera goes first in the array, to be drawn over
@@ -40,19 +40,20 @@ class Neko3dDrawer
 				if( curPoint.z > 0 ) polygon.push( curPoint.Project() )
 			}
 			// draw polygon
-			nekoCam.DrawPolygon( polygon,curFace.GetDrawableColor(),false )
+			nekoCam.DrawPolygon( polygon,curFace.GetColor().GetDrawableColor(),false )
 			
 			// draw points
 			// nekoCam.DrawPolyPoints( polygon,curFace.GetColor() )
 		}
 	}
 	
-	GenTransFaceList( models,neko3dCam,hideFacingAway = true )
+	GenTransFaceList( models,neko3dCam,hideFacingAway = true,
+		light = null )
 	{
 		const faces = []
 		for( const model of models )
 		{
-			model.GenTransPoints( neko3dCam )
+			model.GenTransPoints( neko3dCam,light )
 			const gennedFaces = model.GetFaces()
 			for( const face of gennedFaces )
 			{

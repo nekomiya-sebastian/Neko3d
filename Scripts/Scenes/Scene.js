@@ -1,8 +1,9 @@
 class Scene
 {
-	constructor( neko3dCam = new Neko3dCam() )
+	constructor( neko3dCam = new Neko3dCam(),light = null )
 	{
 		this.neko3dCam = neko3dCam
+		this.light = light
 	}
 	
 	Update( sceneData ) {}
@@ -29,5 +30,10 @@ class Scene
 	Get3dCam()
 	{
 		return( this.neko3dCam )
+	}
+	
+	GetLight()
+	{
+		return( this.light )
 	}
 }

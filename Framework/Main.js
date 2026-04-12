@@ -89,9 +89,13 @@ class Main
 		{
 			this.neko3dDrawer.ClearQueue()
 			
-			this.scenes[this.curScene].Draw3d( this.neko3dDrawer )
+			const curScene = this.scenes[this.curScene]
 			
-			this.neko3dDrawer.Draw( this.nekoCam,this.scenes[this.curScene].Get3dCam() )
+			curScene.Draw3d( this.neko3dDrawer )
+			
+			this.neko3dDrawer.Draw( this.nekoCam,
+				curScene.Get3dCam(),
+				curScene.GetLight() )
 			
 			if( !this.disableUI )
 			{

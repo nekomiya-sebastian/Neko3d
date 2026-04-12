@@ -15,6 +15,9 @@ class NekoModel
 		
 		this.center = Vec3.Zero()
 		this.norms = []
+		
+		this.litCols = []
+		this.invalidateLighting = true
 	}
 	
 	GetPos()
@@ -34,14 +37,14 @@ class NekoModel
 		this.trans.SetScale( scale )
 	}
 	
-	GenTransPoints( neko3dCam )
+	GenTransPoints( neko3dCam,light = null )
 	{
 		if( this.trans.invalidatePoints )
 		{
 			// set trans points based on self
 			this.trans.FillTransPointsList( this.shape,this.transPoints )
 			
-			// then cam transform
+			// then cam transform (& cache center of all points to be used for normals)
 			this.center.SetXYZ( 0,0,0 )
 			for( const point of this.transPoints )
 			{
@@ -51,6 +54,34 @@ class NekoModel
 			this.center.Divide( this.transPoints.length )
 			
 			this.trans.invalidatePoints = false
+			
+			// calc face lighting
+			
+			// fill litCols arr once so we only set later to reduce memory footprint
+			for( let i = this.litCols.length; i < this.colors.length; ++i )
+			{
+				this.litCols.push( this.colors[i].Copy() )
+			}
+		}
+			
+		if( light && this.invalidateLighting )
+		{
+			const lightAng = light.CalcForward()
+			this.trans.GetRotMat().Apply( lightAng,true )
+			neko3dCam.GetRotMat().Apply( lightAng,true )
+			
+			const nekoFaces = this.GetFaces()
+			for( let i = 0; i < nekoFaces.length; ++i )
+			{
+				if( this.trans.invalidateNorms ) this.RecalcNorm( nekoFaces,i )
+				
+				// <0 = pointing same dir, >0 = opposite, =0 = perpendicular
+				// const curDot = light.CalcForward().Dot( this.norms[i] )
+				const curDot = lightAng.Dot( this.norms[i] )
+				light.LightColor( curDot,this.colors[i],this.litCols[i] )
+			}
+			this.invalidateLighting = false
+			this.trans.invalidateNorms = false
 		}
 		
 		return( this.transPoints )
@@ -62,15 +93,30 @@ class NekoModel
 		return( this.transPoints[ind] )
 	}
 	
+	RecalcNorm( nekoFaces,ind )
+	{
+		this.norms[ind] = nekoFaces[ind].GetCenter().Subtract( this.center ).Normalize()
+	}
+	
 	GetFaces()
 	{
-		const faces = []
+		const nekoFaces = []
 		for( let i = 0; i < this.faces.length; ++i )
 		{
-			faces.push( new NekoModelFace( this.faces[i],this,i ) )
-			if( this.trans.invalidateNorms ) this.norms[i] = faces[i].GetCenter().Subtract( this.center )
+			nekoFaces.push( new NekoModelFace( this.faces[i],this,i ) )
+			if( this.trans.invalidateNorms ) this.RecalcNorm( nekoFaces,i )
 		}
-		return( faces )
+		this.trans.invalidateNorms = false
+		return( nekoFaces )
+	}
+	
+	InvalidateLighting()
+	{
+		this.invalidateLighting = true
+	}
+	InvalidateNorms()
+	{
+		this.trans.invalidateNorms = true
 	}
 }
 
@@ -127,9 +173,9 @@ class NekoModelFace
 	GetColor()
 	{
 		let ind = this.ind
-		const nColors = this.modelRef.colors.length
+		const nColors = this.modelRef.litCols.length
 		while( ind >= nColors ) ind -= nColors
-		return( this.modelRef.colors[this.ind] )
+		return( this.modelRef.litCols[this.ind] )
 	}
 	GetDrawableColor()
 	{

@@ -85,6 +85,11 @@ class Vec3
 	{
 		return( this.x == other.x && this.y == other.y && this.z == other.z )
 	}
+	
+	IsNonZero()
+	{
+		return( this.x != 0 || this.y != 0 || this.z != 0 )
+	}
 }
 
 Vec3.Zero = function()
