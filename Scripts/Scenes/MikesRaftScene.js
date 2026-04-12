@@ -35,7 +35,6 @@ class MikesRaftScene extends Scene
 		]
 		
 		this.ghostCube = NekoModel.GenCube()
-		this.ghostCubeColor = "#ffe398"
 		this.drawGhostCube = false
 		
 		this.cubeFuncs = [
@@ -44,9 +43,9 @@ class MikesRaftScene extends Scene
 			this.GenSailCube
 		]
 		this.ghostCubeCols = [
-			"#ffe398", // raft
-			"#bbffe6", // ocean
-			"#fdfdf9" // sail
+			Nekolor.FromHex( "#ffe398" ), // raft
+			Nekolor.FromHex( "#bbffe6" ), // ocean
+			Nekolor.FromHex( "#fdfdf9" ) // sail
 		]
 		this.cubeType = 0
 		
@@ -159,7 +158,9 @@ class MikesRaftScene extends Scene
 					const curPoint = this.ghostCube.GetTransPoint( ind )
 					if( curPoint.z > 0 ) ghostPolygon.push( curPoint.Project() )
 				}
-				nekoCam.DrawPolygon( ghostPolygon,this.ghostCubeCols[this.cubeType],true )
+				nekoCam.DrawPolygon( ghostPolygon,
+					this.ghostCubeCols[this.cubeType].GetDrawableColor(),
+					true )
 			}
 		}
 		
@@ -216,12 +217,12 @@ class MikesRaftScene extends Scene
 	{
 		const raftCube = NekoModel.GenCube()
 		raftCube.colors = [
-			"#502d12",
-			"#c09d63",
-			"#7c5622",
-			"#7c5622",
-			"#a47e3d",
-			"#64431b"
+			Nekolor.FromHex( "#502d12" ),
+			Nekolor.FromHex( "#c09d63" ),
+			Nekolor.FromHex( "#7c5622" ),
+			Nekolor.FromHex( "#7c5622" ),
+			Nekolor.FromHex( "#a47e3d" ),
+			Nekolor.FromHex( "#64431b" )
 		]
 		return( raftCube )
 	}
@@ -229,12 +230,12 @@ class MikesRaftScene extends Scene
 	{
 		const oceanCube = NekoModel.GenCube()
 		oceanCube.colors = [
-			"#171f6c",
-			"#80ebda",
-			"#3cb4bd",
-			"#5cd4cc",
-			"#6688db",
-			"#4d69bd"
+			Nekolor.FromHex( "#171f6c" ),
+			Nekolor.FromHex( "#80ebda" ),
+			Nekolor.FromHex( "#3cb4bd" ),
+			Nekolor.FromHex( "#5cd4cc" ),
+			Nekolor.FromHex( "#6688db" ),
+			Nekolor.FromHex( "#4d69bd" )
 		]
 		return( oceanCube )
 	}
@@ -242,12 +243,12 @@ class MikesRaftScene extends Scene
 	{
 		const sailCube = NekoModel.GenCube()
 		sailCube.colors = [
-			"#908d8f",
-			"#fdfdf9",
-			"#a9a7a8",
-			"#c7c7c7",
-			"#fff5e8",
-			"#fce7d3"
+			Nekolor.FromHex( "#908d8f" ),
+			Nekolor.FromHex( "#fdfdf9" ),
+			Nekolor.FromHex( "#a9a7a8" ),
+			Nekolor.FromHex( "#c7c7c7" ),
+			Nekolor.FromHex( "#fff5e8" ),
+			Nekolor.FromHex( "#fce7d3" )
 		]
 		return( sailCube )
 	}
@@ -256,12 +257,12 @@ class MikesRaftScene extends Scene
 	{
 		return( NekoModel.GenCube( w,h,d,
 			[
-				"#167238",
-				"#c5ff9f",
-				"#46ba4e",
-				"#2a9443",
-				"#96ea75",
-				"#6dd05a",
+				Nekolor.FromHex( "#167238" ),
+				Nekolor.FromHex( "#c5ff9f" ),
+				Nekolor.FromHex( "#46ba4e" ),
+				Nekolor.FromHex( "#2a9443" ),
+				Nekolor.FromHex( "#96ea75" ),
+				Nekolor.FromHex( "#6dd05a" )
 			] ) )
 	}
 	GenMike()
@@ -301,12 +302,12 @@ class MikesRaftScene extends Scene
 		this.models.push( rightMimi )
 		
 		const eyeCols = [
-				"#71033e",
-				"#ff8b94",
-				"#9a0946",
-				"#d01552",
-				"#f5304c",
-				"#fd586b",
+				Nekolor.FromHex( "#71033e" ),
+				Nekolor.FromHex( "#ff8b94" ),
+				Nekolor.FromHex( "#9a0946" ),
+				Nekolor.FromHex( "#d01552" ),
+				Nekolor.FromHex( "#f5304c" ),
+				Nekolor.FromHex( "#fd586b" )
 			]
 		const leftEye = NekoModel.GenCube( 0.1,0.1,0.1,eyeCols )
 		leftEye.GetPos().x -= 0.2

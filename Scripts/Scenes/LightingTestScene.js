@@ -4,6 +4,8 @@ class LightingTestScene extends Scene
 	{
 		super( new NekoThirdPersonCam() )
 		
+		this.light = new Sunlight()
+		
 		this.models = []
 		const globe = NekoModel.GenerateGlobe( 1.1,10,12 )
 		this.models.push( globe )

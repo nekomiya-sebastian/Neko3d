@@ -40,7 +40,7 @@ class Neko3dDrawer
 				if( curPoint.z > 0 ) polygon.push( curPoint.Project() )
 			}
 			// draw polygon
-			nekoCam.DrawPolygon( polygon,curFace.GetColor(),false )
+			nekoCam.DrawPolygon( polygon,curFace.GetDrawableColor(),false )
 			
 			// draw points
 			// nekoCam.DrawPolyPoints( polygon,curFace.GetColor() )

@@ -131,6 +131,10 @@ class NekoModelFace
 		while( ind >= nColors ) ind -= nColors
 		return( this.modelRef.colors[this.ind] )
 	}
+	GetDrawableColor()
+	{
+		return( this.GetColor().GetDrawableColor() )
+	}
 	
 	CalcMaxDistToPoint( point )
 	{
@@ -179,7 +183,7 @@ NekoModel.GenCube = function( w = 0.5,h = 0.5,d = 0.5,colors = [] )
 	]
 	
 	// fill color array if empty, or fill it the rest of the way if necessary
-	for( let i = colors.length; i < faces.length; ++i ) colors.push( NekoUtils.RandColor() )
+	for( let i = colors.length; i < faces.length; ++i ) colors.push( Nekolor.RandColor() )
 	
 	return( new NekoModel( shape,faces,colors ) )
 }
@@ -265,7 +269,7 @@ NekoModel.GenerateGlobe = function( radius,nLat,nLong,color = null )
 	const colors = []
 	for( let i = 0; i < faces.length; ++i )
 	{
-		colors.push( color == null ? NekoUtils.RandColor() : color )
+		colors.push( color == null ? Nekolor.RandColor() : color )
 	}
 	
 	return( new NekoModel( shape,faces,colors ) )
