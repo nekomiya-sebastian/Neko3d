@@ -23,7 +23,7 @@ class LightingTestScene extends Scene
 			}
 		}
 		
-		const sunRotSpd = 0.3
+		const sunRotSpd = 0.1
 		const rotAdd = Vec3.Zero()
 		if( sceneData.kbd.IsKeyDown( "Z" ) ) rotAdd.y += sunRotSpd * sceneData.dt
 		if( sceneData.kbd.IsKeyDown( "C" ) ) rotAdd.y -= sunRotSpd * sceneData.dt

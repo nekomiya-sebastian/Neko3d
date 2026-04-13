@@ -135,7 +135,11 @@ class NekoModelFace
 	FacingCam( neko3dCam )
 	{
 		// const dotResult = neko3dCam.CalcForward().Dot( this.modelRef.norms[this.ind] )
-		const dotResult = Vec3.Forward().Dot( this.modelRef.norms[this.ind] )
+		
+		// GetCenter() gets the post transformed points - as in they're in relation to camera
+		//  so GetCenter() is really a direction vector pointing from the cam at 0,0,0 to self
+		const dotResult = this.GetCenter().Dot( this.modelRef.norms[this.ind] )
+		// const dotResult = Vec3.Forward().Dot( this.modelRef.norms[this.ind] )
 		return( dotResult < 0 ) // <0 = pointing same dir, >0 = opposite, =0 = perpendicular
 		// (it's backwards from what it should be I know shut up)
 	}

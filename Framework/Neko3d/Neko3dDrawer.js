@@ -37,7 +37,8 @@ class Neko3dDrawer
 			for( const ind of curFace.faceData )
 			{
 				const curPoint = curFace.modelRef.GetTransPoint( ind )
-				if( curPoint.z > 0 ) polygon.push( curPoint.Project() )
+				// this case is already handled by NekoModelFace.FacingCam dot product math
+				/*if( curPoint.z > 0 )*/ polygon.push( curPoint.Project() )
 			}
 			// draw polygon
 			nekoCam.DrawPolygon( polygon,curFace.GetColor().GetDrawableColor(),false )
